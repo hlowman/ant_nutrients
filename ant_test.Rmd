@@ -12,23 +12,23 @@ knitr::opts_chunk$set(echo = TRUE)
 Short PCA example (commented out so you can see what happens one step at a time...)
 
 ###Get packages and ant nest nutrient data
-```{r}
+```{r packages_and_data}
 library(corrplot)
 library(tidyverse)
 
 ant_nutrients <- read_csv("ant_nutrients.csv")
-ant_df <- rename(ant_nutrients, Na = X1) # Rename because it thinks it's NA
+ant_df <- rename(ant_nutrients, Na = X1) # Rename because it thinks it's NA (not sodium).
 ```
 
-```{r}
+```{r PCA_run}
 corrplot(cor(ant_df), method = "ellipse")
+# The width of the ellipses is telling you how strongly correllated the data is and the color is telling you how strongly and in what direction the data is correllated and the direction the ellipses is tilted tells you in what direction the data is correllated.
 # Other option:
 corrplot(cor(ant_df), type = "upper", method = "square")
 
-
 # Perform PCA
 
-ant_pca <- prcomp(ant_df, scale = TRUE) # Note: all must be numeric (the country names are just labels), so we exclude column 1
+ant_pca <- prcomp(ant_df, scale = TRUE) # Note: all MUST BE NUMERIC (the country names are just labels), so we exclude column 1
 summary(ant_pca) # Within first two PCs, 63% of variance explained!
 
 # Use the plot() function on the PCA name to see how the variances decline as the principal component increases
@@ -42,5 +42,9 @@ screeplot(ant_pca, type = "lines") # Shows the same information
 # Check out the biplot! 
 
 biplot(ant_pca, cex = 0.5)
+
+# Phosphate and Potassium have low correllation (90 degree angle).
+# Whereas Nitrate and Ammonium are strongly correllated.
+# cex = lag between points
 ```
 
